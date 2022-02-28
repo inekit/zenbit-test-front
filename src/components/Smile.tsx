@@ -71,7 +71,7 @@ interface smileProps extends positionProps, sizeProps {
 
 const Smile = styled.div<smileProps>`
     fill: black;
-    z-index: 1000;
+    z-index: 1;
     transform: rotate(${({rotate})=>rotate ?? 0}deg);
     ${pAbsoluteStyle}
     ${sizeStyle}

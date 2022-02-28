@@ -1,98 +1,105 @@
+import { AnyRecord } from "dns";
 import React from "react";
 import styled, {css} from "styled-components";
+import {FormComponents} from "./FormComponents";
+const {Form, FormHeader, Input, Button} = FormComponents
 
 
-const Form = styled.form`
-    width: 400px;
-    position:absolute;
-    left:120px;
-    top:120px;
-    *{
-        margin-bottom:20px;
-    }
-`
+interface myFormFields{ name: string, message: string, email: string, result?: Object | null }
 
-interface TextProps {
-    weight?: 200 | 300 | 400 | 500 | 600 | 700;
-    fontSize?: number;
+export class MyForm extends React.Component<{}, myFormFields> {
+
+
+  constructor(props: any) {
+    super(props);
+    this.state = {name: "", message: '', email: ''};
+ 
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+
   }
 
-const FormHeader = styled.h2<TextProps>`
-    color: #3E3E3E;
-    font-weight: ${({ weight = 400 }) => weight};
-    font-size: ${({ fontSize = 30 }) => fontSize}px;
-    line-height: 43px;
-    margin-left: 0;
-    text-align: left;
-  `
-  interface inputProps {
-    weight?: 200 | 300 | 400 | 500 | 600 | 700;
-    fontSize?: number;
-    display?: "block" | "auto"
-  }
 
-const Input = styled.input<inputProps>`
-  font-weight: ${({ weight = 400 }) => weight};
-  color: #3E3E3E;
-  background-color: #fff;
-  border: 1px solid #DCDCDC;
-  border-radius: 0.5rem;
-  padding: 30px 0 30px 45px;
-  width: calc(100% - 45px);
-  display: ${({ display = "block" }) => display};
-`
-
-const Button = styled.button<inputProps>`
-    width: 170px;
-    height:60px;
-    border-radius:30px;
-    border:none;
-    background-color: #FAD34F;
-    :hover {
-        background-color: #FAAF11;
-    }
-    color: white;
-
-    transition: 1s;
-  `
-const texts = {
-    title: "Обратитесь к нам!"
+  handleChange = async (event:{target: {value: string}}, name: 'name' | 'message' | 'email') => {
+    await this.setState({[name]: event.target.value} as unknown as myFormFields)
 }
 
 
-export const MyForm =  () => {
+  reloadForm(event: { preventDefault: () => void; }){
+    event.preventDefault();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-
-    const name = formData.get('name'), email = formData.get('email')
-
-    if (!name || !email) return 
-
-	  const APIres = await fetchAPI({name: formData.get('name') as string,  email:formData.get('e') as string});
-
-    //if ( APIres.error.isNull() & APIres.items) 
-  };
+    this.setState({name: "", email: "", message: "", result: null})
+  }
 
 
 
-  return(
-  <Form onSubmit={handleSubmit}>
-    <FormHeader>{texts.title}</FormHeader>
-    <Input type="text" placeholder="Your name*" id="name" name="name"/>
-    <Input type="email" placeholder="Your e-mail*" id="email" name="email"/>
 
-    <Button>Send message</Button>
-  </Form>
-)}
+  async handleSubmit(event: { preventDefault: () => void; }) {
+    event.preventDefault();
+    console.log(this.state)
 
 
- async function fetchAPI(params: {name: FormDataEntryValue; email: FormDataEntryValue}){
-  return await fetch("https://api.example.com/items")
+    const {name, message, email} = this.state
+
+    if (!name || !message  || !email) return 
+
+	  const APIres = await fetchAPI({
+      name:name as string,  
+      email:email as string,
+      message:message as string
+    })
+
+    if (APIres) this.setState({result: APIres});
+
+  }
+
+
+  
+  FormRender = ()=>(
+    <Form onSubmit={(e)=>this.handleSubmit(e)}>
+      <FormHeader>Обратитесь к нам!</FormHeader>
+      <Input value={this.state.name} onChange={e=>this.handleChange(e, 'name')} type="text" placeholder="Your name*" id="name" name="name" required/>
+      <Input value={this.state.email} onChange={e=>this.handleChange(e, 'email')} placeholder="Your e-mail*" id="email" name="email" required/>
+      <Input value={this.state.message} onChange={e=>this.handleChange(e, 'message')} placeholder="Your message*" id="message" name="message" required/>
+  
+      <Button>Send message</Button>
+    </Form>
+  )
+
+
+
+  responseRender = ()=>(
+    <Form onSubmit={(e)=>this.reloadForm(e)}>
+      <FormHeader>{this.state.result? "Форма успешно добавлена" : "Ошибка!"}</FormHeader>
+      <Button>Send another one</Button>
+    </Form>
+  )
+
+
+
+  render() {
+    if (!this.state.result) return this.FormRender()
+     return this.responseRender()
+  }
+}
+
+
+
+
+
+ async function fetchAPI(params: {name: String; email: String, message: String}) : 
+  Promise<{isLoaded: boolean, items: Array<Object> | null, error: Error | null}>{
+  return await fetch("http://62.109.12.174:3035/forms", {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(params)})
     .then(res => res.json())
     .then(
       (result) => {
+        console.log(result)
         return {
           isLoaded: true,
           items: result.items,
@@ -100,6 +107,8 @@ export const MyForm =  () => {
         };
       },
       (error) => {
+        console.log(error)
+
         return {
           isLoaded: true,
           error,

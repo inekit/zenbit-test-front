@@ -27,6 +27,14 @@ const Footer = styled.footer<SizeProps>`
     border:1px solid #D8D8D8
 `
 
+const SocialsWrapper=styled.div`
+z-index:2;
+margin:60px 0 0 250px;
+a{
+  margin-left:20px
+}
+`
+
 const pAbsoluteStyle = css<positionProps>`
   position:absolute;
   top: ${({ top }) => top ? top+"px" : "auto"};
@@ -37,7 +45,12 @@ const pAbsoluteStyle = css<positionProps>`
 
 export default () => (
   <Footer>
-    <LiSvg/>
-    <TwSvg/><FbSvg/><PrSvg/>
+    <SocialsWrapper>
+      <a><LiSvg/></a>
+      <a><TwSvg/></a>
+      <a><FbSvg/></a>
+      <a><PrSvg/></a>
+    </SocialsWrapper>
+    
   </Footer>
 )

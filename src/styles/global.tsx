@@ -12,6 +12,8 @@ export default createGlobalStyle`
 
 body {
     font-family: ApercuArabicPro;
+    height:100vh;
+    overflow:hidden
 } 
 
 

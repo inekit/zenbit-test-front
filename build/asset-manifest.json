@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.js": "/static/js/main.aef7fcab.js",
+    "static/js/787.0c94bee1.chunk.js": "/static/js/787.0c94bee1.chunk.js",
+    "static/media/ApercuArabicPro-Light.woff": "/static/media/ApercuArabicPro-Light.c4b71717a5a027524259.woff",
+    "static/media/twitter.svg": "/static/media/twitter.5c34bfdcbad06512402cd1814be4066b.svg",
+    "static/media/pinterest.svg": "/static/media/pinterest.e5f2b9e0916cf2f4f09d66d581310c7f.svg",
+    "static/media/linkedIn.svg": "/static/media/linkedIn.bc83aedfea6827ae72b31758ae0f2a4a.svg",
+    "index.html": "/index.html",
+    "static/media/facebook.svg": "/static/media/facebook.f4d032d4d3241a3c5e31c002c0d59a85.svg",
+    "static/media/face.svg": "/static/media/face.238225800cc7eb8d79e818aa82611a3c.svg",
+    "static/media/eye.svg": "/static/media/eye.ed5501c5afc64786d47cac2e186fedf1.svg",
+    "static/media/tongue.svg": "/static/media/tongue.5669f1e832ed434189deb9c56c041438.svg",
+    "main.aef7fcab.js.map": "/static/js/main.aef7fcab.js.map",
+    "787.0c94bee1.chunk.js.map": "/static/js/787.0c94bee1.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.aef7fcab.js"
+  ]
+}
